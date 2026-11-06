@@ -10,7 +10,7 @@ A community food rescue app that helps surplus food find a new table.
 
 <br />
 
-![SharePlate homepage — fresh food photo, forest green and warm white design](docs/screenshots/01-home-desktop.png)
+![SharePlate homepage — fresh food photo, forest green and warm white design](docs/screenshots/shareplate-homepage-food.png)
 
 <br />
 
@@ -165,3 +165,4 @@ Use `server/.env.example` as a local template. Your actual `server/.env` file is
 Made with care for the MCA CO6 CA3 project.
 
 </div>
+
