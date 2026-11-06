@@ -42,7 +42,7 @@ The app uses a React frontend, an Express REST API and MongoDB for storing donat
 <summary>See the mobile homepage</summary>
 <br />
 
-![SharePlate mobile homepage](docs/screenshots/02-home-mobile.png)
+![SharePlate mobile homepage](docs/screenshots/shareplate-home-mobile-latest.png)
 
 </details>
 
@@ -52,7 +52,7 @@ The app uses a React frontend, an Express REST API and MongoDB for storing donat
 
 | Browse Food | Donate Food |
 | --- | --- |
-| ![Browse Food screen](docs/screenshots/03-donations-desktop.png) | ![Donate Food screen](docs/screenshots/04-donate-form-desktop.png) |
+| ![Browse Food screen](docs/screenshots/03-donations-desktop.png) | ![Donate Food screen](docs/screenshots/shareplate-donate-latest.png) |
 
 </details>
 
@@ -165,4 +165,5 @@ Use `server/.env.example` as a local template. Your actual `server/.env` file is
 Made with care for the MCA CO6 CA3 project.
 
 </div>
+
 
