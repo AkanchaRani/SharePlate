@@ -1,0 +1,90 @@
+{
+  "info": {
+    "name": "SharePlate CA3 API",
+    "description": "REST API demo for SharePlate CA3. Start the server first (npm start in /server). Run requests in order: 2 (POST) saves the new id automatically for the requests after it.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "donationId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. GET all donations",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/api/donations", "host": ["{{baseUrl}}"], "path": ["api", "donations"] }
+      }
+    },
+    {
+      "name": "2. POST create donation (form-data + image)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "if (body.success && body.data) { pm.collectionVariables.set('donationId', body.data._id); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "title", "value": "Postman demo - vegetable rice", "type": "text" },
+            { "key": "donorName", "value": "Demo Donor", "type": "text" },
+            { "key": "category", "value": "Cooked Meal", "type": "text" },
+            { "key": "quantity", "value": "10 boxes", "type": "text" },
+            { "key": "pickupLocation", "value": "Demo pickup point", "type": "text" },
+            { "key": "pickupDeadline", "value": "2030-01-01T18:00:00.000Z", "type": "text" },
+            { "key": "image", "type": "file", "src": [], "description": "Optional. Choose a JPG, PNG or WebP file under 5 MB." }
+          ]
+        },
+        "url": { "raw": "{{baseUrl}}/api/donations", "host": ["{{baseUrl}}"], "path": ["api", "donations"] }
+      }
+    },
+    {
+      "name": "3. GET one donation by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}"] }
+      }
+    },
+    {
+      "name": "4. PUT update donation (JSON)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Postman demo - vegetable rice (updated)\",\n  \"donorName\": \"Demo Donor\",\n  \"category\": \"Cooked Meal\",\n  \"quantity\": \"8 boxes\",\n  \"pickupLocation\": \"Demo pickup point\",\n  \"pickupDeadline\": \"2030-01-01T20:00:00.000Z\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}"] }
+      }
+    },
+    {
+      "name": "5. DELETE donation",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}"] }
+      }
+    },
+    {
+      "name": "Extra: POST with missing fields (shows 400 from validation middleware)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": { "mode": "formdata", "formdata": [{ "key": "title", "value": "Only a title", "type": "text" }] },
+        "url": { "raw": "{{baseUrl}}/api/donations", "host": ["{{baseUrl}}"], "path": ["api", "donations"] }
+      }
+    }
+  ]
+}
