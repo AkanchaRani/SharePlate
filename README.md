@@ -14,7 +14,7 @@ A community food rescue app that helps surplus food find a new table.
 
 <br />
 
-[Explore the project](#-what-is-shareplate) · [Run it locally](#-run-shareplate-locally) · [CA3 guide](CA3_GUIDE.md) · [Project report](docs/CA3_Report.md)
+[Explore the project](#-what-is-shareplate) · [Run it locally](#-run-shareplate-locally) · [API routes](#-api-at-a-glance)
 
 </div>
 
@@ -22,7 +22,7 @@ A community food rescue app that helps surplus food find a new table.
 
 ## 🍽️ What is SharePlate?
 
-SharePlate is a full-stack MCA CO6 CA3 project built around one simple idea: **surplus food should reach people, not the bin.** A donor can list extra food with its quantity, pickup location, deadline and an optional photo. Visitors can browse current listings and find food available for collection.
+SharePlate is a full-stack food rescue app built around one simple idea: **surplus food should reach people, not the bin.** A donor can list extra food with its quantity, pickup location, deadline and an optional photo. Visitors can browse current listings and find food available for collection.
 
 The app uses a React frontend, an Express REST API and MongoDB for storing donations. Its pages and backend are kept in small, readable parts so the project is straightforward to demonstrate and explain.
 
@@ -119,18 +119,6 @@ An empty list is expected until you add your first donation from the website.
 
 Want to try the API in Postman? Import [`docs/SharePlate.postman_collection.json`](docs/SharePlate.postman_collection.json).
 
-## 📚 CA3 concepts in this project
-
-| Assessment concept | Where to look |
-| --- | --- |
-| Routing | `client/src/App.jsx`, `server/routes/donationRoutes.js` |
-| Middleware | `server/middleware/` |
-| Controllers | `server/controllers/donationController.js` |
-| REST API | `server/routes/donationRoutes.js` |
-| File upload | `server/middleware/upload.js`, `server/uploads/` |
-
-For the step-by-step code explanation and viva preparation, see [`CA3_GUIDE.md`](CA3_GUIDE.md). The written submission is in [`docs/CA3_Report.md`](docs/CA3_Report.md).
-
 ## 🗂️ Project map
 
 ```text
@@ -149,7 +137,7 @@ SharePlate_CA3/
 │   ├── models/              Mongoose donation model
 │   ├── routes/              REST endpoints
 │   └── uploads/              Uploaded donation photos
-└── docs/                    Screenshots, report and Postman collection
+└── docs/                    Screenshots and Postman collection
 ```
 
 ## 🔐 Keep database credentials private
@@ -162,7 +150,7 @@ Use `server/.env.example` as a local template. Your actual `server/.env` file is
 
 **Less waste. More care. Stronger communities.**
 
-Made with care for the MCA CO6 CA3 project.
+Built to help good food find a new table.
 
 </div>
 
