@@ -1,128 +1,154 @@
-# SharePlate — Save Food. Share Hope.
+<div align="center">
 
-A small food-donation board for my CA3 assignment. A donor lists surplus food (with an optional photo) and a visitor can browse the listings. Donations can also be edited and deleted, to demonstrate the REST API.
+# SharePlate
 
-**Stack:** React + Vite + React Router DOM + custom CSS (client) · Node.js + Express + Mongoose + Multer (server) · MongoDB (local) · Postman.
+### Save Food. Share Hope.
 
-Extra files: `CA3_GUIDE.md` (explanation + viva), `docs/CA3_Report.md` (report), `docs/SharePlate.postman_collection.json` (Postman).
+A simple community platform that helps surplus food find the people who can use it.
 
-## Before you start
+[Preview the app](docs/screenshots/01-home-desktop.png) · [CA3 guide](CA3_GUIDE.md) · [Project report](docs/CA3_Report.md) · [Postman collection](docs/SharePlate.postman_collection.json)
 
-You need **Node.js 20.19 or newer** (Node 22.13+ or 24 also work; Node 22 LTS is a good choice) and your **existing local MongoDB service running**. This comes from the packages in the lockfiles: Vite 8 and Mongoose 9 need Node 20.19+ (or 22.12+), and ESLint 10 needs `^20.19.0 || ^22.13.0 || >=24`, so the safe combined range is `^20.19.0 || ^22.13.0 || >=24`. Both `package.json` files declare this in `engines`. Odd versions such as Node 21 or 23 are not supported. This project does not install or change MongoDB. It uses its own database, `shareplate_ca3`, and refuses to connect to the old `shareplate` database.
+</div>
 
-Optional read-only check in PowerShell (the service name may differ on your PC):
+---
+
+## About
+
+SharePlate is a full-stack food donation project made for the MCA CO6 CA3 assessment. Donors can post surplus food with pickup details and an optional photo. Visitors can browse, search and filter available donations, then view the details needed to collect them.
+
+The project keeps the main ideas easy to follow: React pages call Express REST endpoints, controllers handle requests, Mongoose stores donations in MongoDB, and Multer handles uploaded photos.
+
+## Screenshots
+
+| Homepage | Browse food |
+| --- | --- |
+| ![SharePlate homepage](docs/screenshots/01-home-desktop.png) | ![Browse food page](docs/screenshots/03-donations-desktop.png) |
+
+| Donation form | Mobile homepage |
+| --- | --- |
+| ![Donation form](docs/screenshots/04-donate-form-desktop.png) | ![SharePlate on mobile](docs/screenshots/02-home-mobile.png) |
+
+## Features
+
+- Responsive homepage with clear donor and receiver actions
+- Create a donation with title, donor, category, quantity, pickup location, deadline and optional photo
+- Browse donations from MongoDB
+- Search by title, donor, quantity or pickup location
+- Filter by food category and sort by newest or pickup deadline
+- Edit or delete a donation
+- Validate required fields and uploaded image type/size
+- Show a useful empty state when there are no donations
+- Keep database connection errors visible instead of showing sample data
+
+## Technology
+
+- **Frontend:** React, Vite, React Router DOM, JavaScript and custom CSS
+- **Backend:** Node.js, Express, Mongoose and Multer
+- **Database:** MongoDB
+- **API checks:** Postman
+
+## Run locally
+
+### Requirements
+
+- Node.js `20.19+`, `22.13+`, or `24+`
+- npm
+- A running local MongoDB service
+
+### 1. Configure the server
+
+Open a PowerShell terminal in the project folder and run:
 
 ```powershell
-node -v
-npm -v
-Get-Service *mongo*
-```
-
-`Status` should say `Running`.
-
-### If `node -v` shows an older version
-
-Do not change Node globally. The smallest fix is to run the project commands with a temporary Node 22 from npm, inside the project folder only:
-
-```powershell
-cd D:\SharePlate_CA3\server
-npx -p node@22 -- npm install
-npx -p node@22 -- npm start
-```
-
-Use the same pattern in the `client` folder (`npx -p node@22 -- npm run dev`). I tested this pattern on Linux only, not on Windows. The other option is to ask your lab or admin for Node 22 LTS.
-
-## Install and run (two PowerShell windows)
-
-Replace `D:\SharePlate_CA3` with the folder where you extracted the zip. (Do not put it inside the old `D:\SharePlate` folder.)
-
-**Window 1 — server (API on port 5000)**
-
-```powershell
-cd D:\SharePlate_CA3\server
-npm install
+cd server
 Copy-Item .env.example .env
+npm install
 npm start
 ```
 
-You should see `SharePlate server running at http://localhost:5000` and `[DB] MongoDB connected. Database: shareplate_ca3`.
+The API runs at `http://localhost:5000`. Keep this terminal open. The local settings in `server/.env.example` use MongoDB database `shareplate_ca3` on `127.0.0.1:27017`.
 
-**Window 2 — client (website on port 5173)**
+### 2. Start the website
+
+Open a second terminal in the project folder and run:
 
 ```powershell
-cd D:\SharePlate_CA3\client
+cd client
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173** in your browser.
+Open the Vite address shown in the terminal, usually `http://localhost:5173`.
 
-If PowerShell says scripts are disabled for `npm`, run the same commands as `npm.cmd install`, `npm.cmd start`, `npm.cmd run dev` — no system setting needs to change.
+### Check the connection
 
-## Quick checks
+- Website: `http://localhost:5173`
+- Donation listings: `http://localhost:5173/donations`
+- Donations API: `http://localhost:5000/api/donations`
 
-- http://localhost:5173 shows the Home page.
-- http://localhost:5173/donations shows the listings (empty at first).
-- http://localhost:5000/api/donations returns JSON.
-- If MongoDB is not running, the API answers with `503` and the Browse Food page shows "Database is not connected…". The app never switches to fake data or another database.
+The API should return JSON. An empty `data` array is normal before the first donation is added.
 
-## Environment files
+## API routes
 
-| File | Purpose |
-|---|---|
-| `server/.env.example` | Copy to `server/.env`. Holds `PORT`, `MONGODB_URI`, `CLIENT_URL`. No passwords are needed for local MongoDB. |
-| `client/.env.example` | Optional. Only needed if the API is not at `http://localhost:5000`. |
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/donations` | List donations |
+| `GET` | `/api/donations/:id` | Get one donation |
+| `POST` | `/api/donations` | Create a donation; accepts an optional image |
+| `PUT` | `/api/donations/:id` | Update a donation |
+| `DELETE` | `/api/donations/:id` | Delete a donation |
 
-`.env` files are listed in `.gitignore` and must never be committed.
+To try the requests, import [`docs/SharePlate.postman_collection.json`](docs/SharePlate.postman_collection.json) into Postman.
+
+## Project layout
+
+```text
+SharePlate_CA3/
+├── client/
+│   ├── public/images/       Homepage image and static assets
+│   └── src/
+│       ├── components/      Navbar, footer, logo and donation card
+│       ├── pages/           Home, donations, form and not-found pages
+│       ├── services/        API calls used by the frontend
+│       └── styles.css       Custom responsive styles
+├── server/
+│   ├── config/              MongoDB connection
+│   ├── controllers/         Donation request logic
+│   ├── middleware/          Validation, upload, logging and errors
+│   ├── models/              Mongoose donation model
+│   ├── routes/              REST API routes
+│   └── uploads/              Uploaded donation photos
+└── docs/                    Screenshots, report and Postman collection
+```
+
+## CA3 concepts demonstrated
+
+- **Routing:** React Router pages and Express donation routes
+- **Middleware:** request logging, validation, image upload, database availability and error handling
+- **Controllers:** donation CRUD logic kept separate from route definitions
+- **REST API:** GET, POST, PUT and DELETE endpoints
+- **File upload:** optional donation images handled with Multer
 
 ## Useful commands
 
-| Where | Command | What it does |
-|---|---|---|
-| `server` | `npm start` | Run the API |
-| `server` | `npm run dev` | Run the API and restart on file changes |
-| `client` | `npm run dev` | Run the website |
-| `client` | `npm run lint` | Check the code style |
-| `client` | `npm run build` | Make a production build in `client/dist` |
+Run these from the matching folder:
 
-## Postman
+| Folder | Command | Purpose |
+| --- | --- | --- |
+| `client` | `npm run dev` | Start the frontend |
+| `client` | `npm run lint` | Check frontend code style |
+| `client` | `npm run build` | Create the frontend production build |
+| `server` | `npm start` | Start the API |
+| `server` | `npm run dev` | Start the API with Node watch mode |
 
-1. Open Postman → **Import** → choose `docs/SharePlate.postman_collection.json`.
-2. Start the server.
-3. Run the requests in order (1 → 5). Request 2 saves the new id automatically for requests 3–5.
-4. In request 2, pick an image in the `image` row (optional).
+## Safety note
 
-## Folder structure
+The real `server/.env` file is local and must not be committed. Keep using `.env.example` as the template; do not put database passwords or private connection strings in GitHub.
 
-```
-SharePlate_CA3/
-├── client/                 React app
-│   ├── public/images/      locally stored homepage photograph
-│   └── src/
-│       ├── App.jsx         frontend routes
-│       ├── pages/          Home, Donations, DonationForm, NotFound
-│       ├── components/     Navbar, Footer, Logo, DonationCard
-│       ├── services/       donationApi.js (all fetch calls)
-│       └── styles.css      custom CSS
-├── server/                 Express API
-│   ├── server.js           app setup + middleware order
-│   ├── config/db.js        MongoDB connection
-│   ├── models/             Donation.js
-│   ├── routes/             donationRoutes.js
-│   ├── controllers/        donationController.js
-│   ├── middleware/         requestLogger, validateDonation, upload, errorHandler, checkDatabase
-│   └── uploads/            saved images (created at runtime)
-└── docs/                   report, Postman collection, screenshots/
-```
+---
 
-## Photo credits
+<div align="center">
 
-The homepage includes a locally stored photograph of fresh food and produce, restored from the earlier SharePlate homepage preview, so it loads without relying on an external image host.
+**SharePlate — saving food, sharing smiles, building hope.**
 
-| File | Photographer | Source URL | Licence |
-|---|---|---|---|
-| `client/public/images/hero.jpg` | Food photo restored from the earlier SharePlate homepage preview | Included locally |
-
-Photos that donors upload through the form are saved in `server/uploads/` and are not part of the project files. A listing without a photo simply shows no image area.
-
-The Browse Food and API screenshots in `docs/screenshots/` were captured while the local MongoDB service was running. The API returned HTTP 200 with an empty list; no sample donations were inserted for the screenshots. For your own submission, capture additional screens of the create, edit, delete and upload flows after you try them locally.
+</div>
