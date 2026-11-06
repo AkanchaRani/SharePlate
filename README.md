@@ -4,60 +4,77 @@
 
 ### Save Food. Share Hope.
 
-A simple community platform that helps surplus food find the people who can use it.
+**Good food deserves a second chance.**
 
-[Preview the app](docs/screenshots/01-home-desktop.png) · [CA3 guide](CA3_GUIDE.md) · [Project report](docs/CA3_Report.md) · [Postman collection](docs/SharePlate.postman_collection.json)
+A community food rescue app that helps surplus food find a new table.
+
+<br />
+
+![SharePlate homepage — fresh food photo, forest green and warm white design](docs/screenshots/01-home-desktop.png)
+
+<br />
+
+[Explore the project](#-what-is-shareplate) · [Run it locally](#-run-shareplate-locally) · [CA3 guide](CA3_GUIDE.md) · [Project report](docs/CA3_Report.md)
 
 </div>
 
 ---
 
-## About
+## 🍽️ What is SharePlate?
 
-SharePlate is a full-stack food donation project made for the MCA CO6 CA3 assessment. Donors can post surplus food with pickup details and an optional photo. Visitors can browse, search and filter available donations, then view the details needed to collect them.
+SharePlate is a full-stack MCA CO6 CA3 project built around one simple idea: **surplus food should reach people, not the bin.** A donor can list extra food with its quantity, pickup location, deadline and an optional photo. Visitors can browse current listings and find food available for collection.
 
-The project keeps the main ideas easy to follow: React pages call Express REST endpoints, controllers handle requests, Mongoose stores donations in MongoDB, and Multer handles uploaded photos.
+The app uses a React frontend, an Express REST API and MongoDB for storing donations. Its pages and backend are kept in small, readable parts so the project is straightforward to demonstrate and explain.
 
-## Screenshots
+## 🌿 What you can do
 
-| Homepage | Browse food |
+| Share food | Find food | Manage listings |
+| --- | --- | --- |
+| Add a donation with pickup details and an optional photo. | Search donations, filter by category and sort by newest or pickup deadline. | Open, edit or delete a donation listing. |
+
+- See a helpful empty state when there are no available donations.
+- Get clear feedback when the database is unavailable.
+- Use the layout on desktop or mobile.
+
+## 🖥️ A look around
+
+<details>
+<summary>See the mobile homepage</summary>
+<br />
+
+![SharePlate mobile homepage](docs/screenshots/02-home-mobile.png)
+
+</details>
+
+<details>
+<summary>See Browse Food and Donate Food</summary>
+<br />
+
+| Browse Food | Donate Food |
 | --- | --- |
-| ![SharePlate homepage](docs/screenshots/01-home-desktop.png) | ![Browse food page](docs/screenshots/03-donations-desktop.png) |
+| ![Browse Food screen](docs/screenshots/03-donations-desktop.png) | ![Donate Food screen](docs/screenshots/04-donate-form-desktop.png) |
 
-| Donation form | Mobile homepage |
-| --- | --- |
-| ![Donation form](docs/screenshots/04-donate-form-desktop.png) | ![SharePlate on mobile](docs/screenshots/02-home-mobile.png) |
+</details>
 
-## Features
-
-- Responsive homepage with clear donor and receiver actions
-- Create a donation with title, donor, category, quantity, pickup location, deadline and optional photo
-- Browse donations from MongoDB
-- Search by title, donor, quantity or pickup location
-- Filter by food category and sort by newest or pickup deadline
-- Edit or delete a donation
-- Validate required fields and uploaded image type/size
-- Show a useful empty state when there are no donations
-- Keep database connection errors visible instead of showing sample data
-
-## Technology
+## 🧰 Built with
 
 - **Frontend:** React, Vite, React Router DOM, JavaScript and custom CSS
-- **Backend:** Node.js, Express, Mongoose and Multer
-- **Database:** MongoDB
-- **API checks:** Postman
+- **Backend:** Node.js and Express
+- **Database:** MongoDB with Mongoose
+- **Image upload:** Multer
+- **API demonstration:** Postman
 
-## Run locally
+## 🚀 Run SharePlate locally
 
-### Requirements
+### You’ll need
 
 - Node.js `20.19+`, `22.13+`, or `24+`
 - npm
 - A running local MongoDB service
 
-### 1. Configure the server
+### 1. Start the API
 
-Open a PowerShell terminal in the project folder and run:
+Open a PowerShell terminal at the project folder and run:
 
 ```powershell
 cd server
@@ -66,11 +83,13 @@ npm install
 npm start
 ```
 
-The API runs at `http://localhost:5000`. Keep this terminal open. The local settings in `server/.env.example` use MongoDB database `shareplate_ca3` on `127.0.0.1:27017`.
+The API starts at `http://localhost:5000`. Keep this terminal open. The example settings connect to local MongoDB at `127.0.0.1:27017` and use the project database `shareplate_ca3`.
+
+If `server/.env` already exists, skip `Copy-Item` so your existing settings stay untouched.
 
 ### 2. Start the website
 
-Open a second terminal in the project folder and run:
+Open a second terminal at the project folder and run:
 
 ```powershell
 cd client
@@ -78,29 +97,41 @@ npm install
 npm run dev
 ```
 
-Open the Vite address shown in the terminal, usually `http://localhost:5173`.
+Open the local address Vite prints in the terminal, usually `http://localhost:5173`.
 
-### Check the connection
+### 3. Check that it works
 
 - Website: `http://localhost:5173`
-- Donation listings: `http://localhost:5173/donations`
-- Donations API: `http://localhost:5000/api/donations`
+- Browse donations: `http://localhost:5173/donations`
+- API response: `http://localhost:5000/api/donations`
 
-The API should return JSON. An empty `data` array is normal before the first donation is added.
+An empty list is expected until you add your first donation from the website.
 
-## API routes
+## 🔌 API at a glance
 
-| Method | Route | Purpose |
+| Method | Endpoint | What it does |
 | --- | --- | --- |
-| `GET` | `/api/donations` | List donations |
-| `GET` | `/api/donations/:id` | Get one donation |
-| `POST` | `/api/donations` | Create a donation; accepts an optional image |
+| `GET` | `/api/donations` | List all donations |
+| `GET` | `/api/donations/:id` | View one donation |
+| `POST` | `/api/donations` | Create a donation and upload an optional photo |
 | `PUT` | `/api/donations/:id` | Update a donation |
-| `DELETE` | `/api/donations/:id` | Delete a donation |
+| `DELETE` | `/api/donations/:id` | Remove a donation |
 
-To try the requests, import [`docs/SharePlate.postman_collection.json`](docs/SharePlate.postman_collection.json) into Postman.
+Want to try the API in Postman? Import [`docs/SharePlate.postman_collection.json`](docs/SharePlate.postman_collection.json).
 
-## Project layout
+## 📚 CA3 concepts in this project
+
+| Assessment concept | Where to look |
+| --- | --- |
+| Routing | `client/src/App.jsx`, `server/routes/donationRoutes.js` |
+| Middleware | `server/middleware/` |
+| Controllers | `server/controllers/donationController.js` |
+| REST API | `server/routes/donationRoutes.js` |
+| File upload | `server/middleware/upload.js`, `server/uploads/` |
+
+For the step-by-step code explanation and viva preparation, see [`CA3_GUIDE.md`](CA3_GUIDE.md). The written submission is in [`docs/CA3_Report.md`](docs/CA3_Report.md).
+
+## 🗂️ Project map
 
 ```text
 SharePlate_CA3/
@@ -108,47 +139,29 @@ SharePlate_CA3/
 │   ├── public/images/       Homepage image and static assets
 │   └── src/
 │       ├── components/      Navbar, footer, logo and donation card
-│       ├── pages/           Home, donations, form and not-found pages
-│       ├── services/        API calls used by the frontend
-│       └── styles.css       Custom responsive styles
+│       ├── pages/           Home, browse, donation form and not-found pages
+│       ├── services/        Frontend API calls
+│       └── styles.css       Responsive custom styling
 ├── server/
 │   ├── config/              MongoDB connection
-│   ├── controllers/         Donation request logic
-│   ├── middleware/          Validation, upload, logging and errors
+│   ├── controllers/         Donation logic
+│   ├── middleware/          Validation, upload, logging and error handling
 │   ├── models/              Mongoose donation model
-│   ├── routes/              REST API routes
+│   ├── routes/              REST endpoints
 │   └── uploads/              Uploaded donation photos
 └── docs/                    Screenshots, report and Postman collection
 ```
 
-## CA3 concepts demonstrated
+## 🔐 Keep database credentials private
 
-- **Routing:** React Router pages and Express donation routes
-- **Middleware:** request logging, validation, image upload, database availability and error handling
-- **Controllers:** donation CRUD logic kept separate from route definitions
-- **REST API:** GET, POST, PUT and DELETE endpoints
-- **File upload:** optional donation images handled with Multer
-
-## Useful commands
-
-Run these from the matching folder:
-
-| Folder | Command | Purpose |
-| --- | --- | --- |
-| `client` | `npm run dev` | Start the frontend |
-| `client` | `npm run lint` | Check frontend code style |
-| `client` | `npm run build` | Create the frontend production build |
-| `server` | `npm start` | Start the API |
-| `server` | `npm run dev` | Start the API with Node watch mode |
-
-## Safety note
-
-The real `server/.env` file is local and must not be committed. Keep using `.env.example` as the template; do not put database passwords or private connection strings in GitHub.
+Use `server/.env.example` as a local template. Your actual `server/.env` file is ignored by Git and should never be committed or shared. The example file is safe to keep in the repository.
 
 ---
 
 <div align="center">
 
-**SharePlate — saving food, sharing smiles, building hope.**
+**Less waste. More care. Stronger communities.**
+
+Made with care for the MCA CO6 CA3 project.
 
 </div>
